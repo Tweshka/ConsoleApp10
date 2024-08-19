@@ -1,52 +1,34 @@
-﻿using System;
-using System.Threading;
+﻿using System.Diagnostics;
 
-class User
+static void CreateMatrix(int n)
 {
-    public string Login { get; set; }
-    public string Name { get; set; }
-    public bool IsPremium { get; set; }
-}
+    var matrix = new int[n][];
 
-class Program
-{
-    static void Main(string[] args)
+    for (int i = 0; i < n; i++)
     {
-        // Список пользователей
-        List<User> users = new List<User>()
-    {
-      new User { Login = "user1", Name = "Иван", IsPremium = true },
-      new User { Login = "user2", Name = "Мария", IsPremium = false },
-      new User { Login = "user3", Name = "Петр", IsPremium = true }
-    };
-
-        // Цикл по списку пользователей
-        foreach (User user in users)
-        {
-            // Вывод приветствия
-            Console.WriteLine($"Привет, {user.Name}!");
-
-            // Проверка на премиум-подписку
-            if (!user.IsPremium)
-            {
-                // Показ рекламы
-                ShowAds();
-            }
-        }
-
-        Console.ReadLine();
+        matrix[i] = new int[n];
     }
 
-    // Метод показа рекламы
-    static void ShowAds()
+    for (int i = 0; i < n; i++)
     {
-        Console.WriteLine("Посетите наш новый сайт с бесплатными играми free.games.for.a.fool.com");
-        Thread.Sleep(2000);
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i][j] = i + j;
+        }
+    }
+}
+static void Estimate(int n)
+{
+    var timer = new Stopwatch();
+    timer.Start();
 
-        Console.WriteLine("Купите подписку на МыКомбо и слушайте музыку везде и всегда.");
-        Thread.Sleep(4000);
+    for (int i = 0; i < n; i++)
+    {
+        timer.Restart();
 
-        Console.WriteLine("Оформите премиум-подписку на наш сервис, чтобы не видеть рекламу.");
-        Thread.Sleep(6000);
+        CreateMatrix(10000);
+
+        timer.Stop();
+        Console.WriteLine(timer.ElapsedMilliseconds);
     }
 }
