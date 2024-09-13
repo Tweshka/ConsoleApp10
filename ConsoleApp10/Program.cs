@@ -1,34 +1,32 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.IO;
+namespace CountWords
+{ }
 
-static void CreateMatrix(int n)
+class Program
 {
-    var matrix = new int[n][];
-
-    for (int i = 0; i < n; i++)
+    static void Main()
     {
-        matrix[i] = new int[n];
-    }
+        string text = File.ReadAllText(" C: \\Пользователи\\Twe1ve\\Загрузки\\Text.txt");
 
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
+
+        // Убираем знаки пунктуации
+        var noPunctuationText = new string(text.Where(c => !char.IsPunctuation(c)).ToArray());
+
+        // Приводим весь текст к нижнему регистру и разбиваем на слова
+        var words = noPunctuationText.ToLower().Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+        // Подсчитываем количество вхождений каждого слова
+        var wordCount = words.GroupBy(word => word)
+            .Select(group => new { Word = group.Key, Count = group.Count() })
+            .OrderByDescending(x => x.Count)
+            .Take(10);
+
+        // Выводим результаты
+        Console.WriteLine("10 самых частых слов:");
+        foreach (var item in wordCount)
         {
-            matrix[i][j] = i + j;
+            Console.WriteLine($"{item.Word}: {item.Count}");
         }
-    }
-}
-static void Estimate(int n)
-{
-    var timer = new Stopwatch();
-    timer.Start();
-
-    for (int i = 0; i < n; i++)
-    {
-        timer.Restart();
-
-        CreateMatrix(10000);
-
-        timer.Stop();
-        Console.WriteLine(timer.ElapsedMilliseconds);
     }
 }
