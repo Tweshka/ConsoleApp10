@@ -7,7 +7,7 @@ class Program
 {
     static void Main()
     {
-        string text = File.ReadAllText(" C: \\Пользователи\\Twe1ve\\Загрузки\\Text.txt");
+        string text = File.ReadAllText("C:\\Users\\Twe1ve\\Downloads\\Text.txt.txt");
 
 
         // Убираем знаки пунктуации
