@@ -1,32 +1,38 @@
 ﻿using System;
-using System.IO;
-namespace CountWords
-{ }
+using System.Collections.Generic;
+using System.Diagnostics;
 
 class Program
 {
     static void Main()
     {
-        string text = File.ReadAllText("C:\\Users\\Twe1ve\\Downloads\\Text.txt.txt");
+        int numberOfElements = 100000; // Количество элементов для вставки
 
+        // Создаём и заполняем текстом, для примера
+        string text = "C:\\Users\\Twe1ve\\Downloads\\Text.txt.txt";
 
-        // Убираем знаки пунктуации
-        var noPunctuationText = new string(text.Where(c => !char.IsPunctuation(c)).ToArray());
+        // Отслеживание времени для List<T>
+        var stopwatch = new Stopwatch();
+        List<string> list = new List<string>();
 
-        // Приводим весь текст к нижнему регистру и разбиваем на слова
-        var words = noPunctuationText.ToLower().Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-        // Подсчитываем количество вхождений каждого слова
-        var wordCount = words.GroupBy(word => word)
-            .Select(group => new { Word = group.Key, Count = group.Count() })
-            .OrderByDescending(x => x.Count)
-            .Take(10);
-
-        // Выводим результаты
-        Console.WriteLine("10 самых частых слов:");
-        foreach (var item in wordCount)
+        stopwatch.Start();
+        for (int i = 0; i < numberOfElements; i++)
         {
-            Console.WriteLine($"{item.Word}: {item.Count}");
+            list.Insert(0, text); // Вставка в начало списка
         }
+        stopwatch.Stop();
+        Console.WriteLine($"Время вставки в List: {stopwatch.ElapsedMilliseconds} мс");
+
+        // Отслеживание времени для LinkedList<T>
+        stopwatch.Reset();
+        LinkedList<string> linkedList = new LinkedList<string>();
+
+        stopwatch.Start();
+        for (int i = 0; i < numberOfElements; i++)
+        {
+            linkedList.AddFirst(text); // Вставка в начало связного списка
+        }
+        stopwatch.Stop();
+        Console.WriteLine($"Время вставки в LinkedList: {stopwatch.ElapsedMilliseconds} мс");
     }
 }
