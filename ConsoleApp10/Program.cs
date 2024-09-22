@@ -1,38 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using Perfolizer.Mathematics.SignificanceTesting;
+using System.Runtime.InteropServices;
+using System.Text;
 
-class Program
+namespace LimlModule
 {
-    static void Main()
+    class Program
     {
-        int numberOfElements = 100000; // Количество элементов для вставки
-
-        // Создаём и заполняем текстом, для примера
-        string text = "C:\\Users\\Twe1ve\\Downloads\\Text.txt.txt";
-
-        // Отслеживание времени для List<T>
-        var stopwatch = new Stopwatch();
-        List<string> list = new List<string>();
-
-        stopwatch.Start();
-        for (int i = 0; i < numberOfElements; i++)
+        static void Main(string[] args)
         {
-            list.Insert(0, text); // Вставка в начало списка
-        }
-        stopwatch.Stop();
-        Console.WriteLine($"Время вставки в List: {stopwatch.ElapsedMilliseconds} мс");
+            Console.OutputEncoding = Encoding.UTF8;
 
-        // Отслеживание времени для LinkedList<T>
-        stopwatch.Reset();
-        LinkedList<string> linkedList = new LinkedList<string>();
 
-        stopwatch.Start();
-        for (int i = 0; i < numberOfElements; i++)
-        {
-            linkedList.AddFirst(text); // Вставка в начало связного списка
+            {
+                var studentsWithCoarses = from stud in students
+                                          where stud.Age < 29 // берем всех студентов младше 29
+                                          where stud.Languages.Contains("английский") // ищем тех, у кого в списке языков есть английский
+                                          let birthYear = DateTime.Now.Year - stud.Age // Вычисляем год рождения
+                                          from coarse in coarses
+                                          where coarse.Name.Contains("C#") // теперь выбираем только курс по C#
+                                          select new // выборка в новую сущность
+                                          {
+                                              Name = stud.Name,
+                                              BirthYear = birthYear,
+                                              CoarseName = coarse.Name
+                                          };
+
+
+                // выведем результат
+                foreach (var stud in studentsWithCoarses)
+                    Console.WriteLine($"Студент {stud.Name} ({stud.BirthYear}) добавлен курс {stud.CoarseName}");
+            }
         }
-        stopwatch.Stop();
-        Console.WriteLine($"Время вставки в LinkedList: {stopwatch.ElapsedMilliseconds} мс");
     }
 }
+
